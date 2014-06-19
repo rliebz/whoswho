@@ -1,4 +1,8 @@
-import string
+import sys
+import unicodedata
+
+table = dict.fromkeys(i for i in xrange(sys.maxunicode)
+                              if unicodedata.category(unichr(i)).startswith('P'))
 
 from nameparser import HumanName
 
@@ -26,18 +30,23 @@ class Name(object):
         return result
 
     def _compare_first(self, other):
-        return self.name.first == other.name.first
+        return equate_initial_to_name(self.name.first, other.name.first)
 
     def _compare_middle(self, other):
 
-        own_middle = self.name.middle
-        other_middle = self.name.middle
-
         # If middle initial is omitted, assume a match
-        if not own_middle or not other_middle:
+        if not self.name.middle or not other.name.middle:
             return True
 
-        return own_middle == other_middle
+        # Compare list of middle initials
+        if len(self.name.middle_list) != len(other.name.middle_list):
+            return False
+
+        result = True
+        for i, name in enumerate(self.name.middle_list):
+            result &= equate_initial_to_name(name, other.name.middle_list[i])
+
+        return result
 
     def _compare_last(self, other):
         return self.name.last == other.name.last
@@ -51,8 +60,16 @@ def convert_to_name(stringable):
     return Name(name_string)
 
 
+def equate_initial_to_name(name1, name2):
+    """
+    Evaluates initials of first name
+    """
+    name1 = strip_punctuation(name1).lower()
+    name2 = strip_punctuation(name2).lower()
+
+    return name1 in name2 or name2 in name1
+
+
 def strip_punctuation(word):
     """Strips punctuation for use in middle initial"""
-    return word.translate(string.maketrans("",""), string.punctuation)
-
-print 'hi'
+    return word.translate(table)
