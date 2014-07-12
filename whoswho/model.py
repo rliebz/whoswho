@@ -1,22 +1,40 @@
 from nameparser import HumanName
 
-from config import UNIQUE_SUFFIXES
+from config import UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES
 from utils import equate_initial_to_name, strip_punctuation
 
 
 class Name(object):
 
     def __init__(self, fullname):
-        fullname = strip_punctuation(unicode(fullname).upper())
+        fullname = strip_punctuation(unicode(fullname))
         self.name = HumanName(fullname)
 
+        # lower after parsing to preserve parsing logic
+        self.name.title = self.name.title.lower()
+        self.name.first = self.name.first.lower()
+        self.name.middle = self.name.middle.lower()
+        self.name.last = self.name.last.lower()
+        self.name.suffix = self.name.suffix.lower()
+
     def deep_compare(self, other):
+        title = self._compare_title(other)
         first = self._compare_first(other)
         middle = self._compare_middle(other)
         last = self._compare_last(other)
         suffix = self._compare_suffix(other)
-        result = first and middle and last and suffix
-        return result
+
+        return title and first and middle and last and suffix
+
+    def _compare_title(self, other):
+
+        # If title is omitted, assume a match
+        if not self.name.title or not other.name.title:
+            return True
+
+        titles = set(self.name.title_list + other.name.title_list)
+
+        return not (titles & MALE_TITLES and titles & FEMALE_TITLES)
 
     def _compare_first(self, other):
         return equate_initial_to_name(self.name.first, other.name.first)
