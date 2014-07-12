@@ -1,26 +1,13 @@
 from nameparser import HumanName
 
-from utils import equate_initial_to_name
+from utils import equate_initial_to_name, strip_punctuation
 
 
 class Name(object):
 
     def __init__(self, fullname):
-        try:
-            fullname = unicode(fullname).lower()
-        except UnicodeDecodeError:
-            return NotImplemented
-
+        fullname = strip_punctuation(unicode(fullname).upper())
         self.name = HumanName(fullname)
-
-    def __eq__(self, other):
-        other = Name(other)
-        result = self.deep_compare(other)
-        return result
-
-    def __ne__(self, other):
-        result = self.__eq__(other)
-        return not result
 
     def deep_compare(self, other):
         first = self._compare_first(other)
