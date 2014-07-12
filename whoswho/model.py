@@ -1,14 +1,14 @@
 from nameparser import HumanName
 
 from config import UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES
-from utils import equate_initial_to_name, strip_punctuation
+from utils import equate_initial_to_name, strip_punctuation, make_ascii
 
 
 class Name(object):
 
     def __init__(self, fullname):
-        fullname = strip_punctuation(unicode(fullname))
-        self.name = HumanName(fullname)
+        cleaned_name = strip_punctuation(make_ascii(unicode(fullname)))
+        self.name = HumanName(cleaned_name)
 
         # lower after parsing to preserve parsing logic
         self.name.title = self.name.title.lower()

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 from whoswho import who
 from whoswho import config
@@ -10,6 +11,10 @@ class TestFullNames(unittest.TestCase):
 
     def setUp(self):
         self.name = 'Robert Evan Liebowitz'
+
+    def test_unicode(self):
+        self.assertTrue(who.is_it(self.name, u'attaché Robert Evan Liebowitz'))
+        self.assertTrue(who.is_it(self.name, u'Rōbért Èvān Lîęböwitz'))
 
     def test_name_and_initials(self):
         self.assertTrue(who.is_it(self.name, 'R. Evan Liebowitz'))
@@ -28,14 +33,20 @@ class TestFullNames(unittest.TestCase):
         self.assertFalse(who.is_it(self.name, 'R. V. Liebowitz'))
         self.assertFalse(who.is_it(self.name, 'O. E. Liebowitz'))
 
+    def test_short_names(self):
+        self.assertTrue(who.is_it(self.name, 'Rob Liebowitz'))
+        # TODO: Should these be true?
+        self.assertFalse(who.is_it(self.name, 'Bert Liebowitz'))
+        self.assertFalse(who.is_it(self.name, 'Robbie Liebowitz'))
+
     def test_suffixes(self):
-        name = 'Jonathan James Johnston Jr'
-        self.assertTrue(who.is_it(name, 'Jonathan James Johnston'))
-        self.assertTrue(who.is_it(name, 'Jonathan James Johnston Jr'))
-        self.assertTrue(who.is_it(name, 'Jonathan James Johnston, PhD'))
-        self.assertFalse(who.is_it(name, 'Jonathan James Johnston, Sr'))
-        self.assertFalse(who.is_it(name, 'Jonathan James Johnston, Sr, PhD'))
-        self.assertTrue(who.is_it(name, 'Jonathan James Johnston, Jr, PhD'))
+        name = 'Robert Liebowitz Jr'
+        self.assertTrue(who.is_it(name, 'Robert Liebowitz'))
+        self.assertTrue(who.is_it(name, 'Robert Liebowitz Jr'))
+        self.assertTrue(who.is_it(name, 'Robert Liebowitz, PhD'))
+        self.assertFalse(who.is_it(name, 'Robert Liebowitz, Sr'))
+        self.assertFalse(who.is_it(name, 'Robert Liebowitz, Sr, PhD'))
+        self.assertTrue(who.is_it(name, 'Robert Liebowitz, Jr, PhD'))
 
     def test_titles(self):
         name = 'Mr. Robert Liebowitz'
