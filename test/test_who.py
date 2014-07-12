@@ -24,6 +24,15 @@ class TestFullNames(unittest.TestCase):
         self.assertFalse(who.is_it(self.name, 'R. V. Liebowitz'))
         self.assertFalse(who.is_it(self.name, 'O. E. Liebowitz'))
 
+    def test_suffixes(self):
+        name = 'Jonathan James Johnston Jr'
+        self.assertTrue(who.is_it(name, 'Jonathan James Johnston'))
+        self.assertTrue(who.is_it(name, 'Jonathan James Johnston Jr'))
+        self.assertTrue(who.is_it(name, 'Jonathan James Johnston, PhD'))
+        self.assertFalse(who.is_it(name, 'Jonathan James Johnston, Sr'))
+        self.assertFalse(who.is_it(name, 'Jonathan James Johnston, Sr, PhD'))
+        self.assertTrue(who.is_it(name, 'Jonathan James Johnston, Jr, PhD'))
+
 
 if __name__ == '__main__':
     unittest.main()
