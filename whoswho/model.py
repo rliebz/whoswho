@@ -1,21 +1,21 @@
-import sys
-import unicodedata
-
-table = dict.fromkeys(i for i in xrange(sys.maxunicode)
-                              if unicodedata.category(unichr(i)).startswith('P'))
-
 from nameparser import HumanName
+
+from utils import equate_initial_to_name
 
 
 class Name(object):
 
     def __init__(self, fullname):
+        try:
+            fullname = unicode(fullname).lower()
+        except UnicodeDecodeError:
+            return NotImplemented
+
         self.name = HumanName(fullname)
 
     def __eq__(self, other):
-        other = convert_to_name(other)
+        other = Name(other)
         result = self.deep_compare(other)
-
         return result
 
     def __ne__(self, other):
@@ -50,26 +50,3 @@ class Name(object):
 
     def _compare_last(self, other):
         return self.name.last == other.name.last
-
-
-def convert_to_name(stringable):
-    try:
-        name_string = unicode(stringable)
-    except UnicodeDecodeError:
-        return NotImplemented
-    return Name(name_string)
-
-
-def equate_initial_to_name(name1, name2):
-    """
-    Evaluates initials of first name
-    """
-    name1 = strip_punctuation(name1).lower()
-    name2 = strip_punctuation(name2).lower()
-
-    return name1 in name2 or name2 in name1
-
-
-def strip_punctuation(word):
-    """Strips punctuation for use in middle initial"""
-    return word.translate(table)

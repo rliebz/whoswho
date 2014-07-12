@@ -19,3 +19,7 @@ class TestFullNames(unittest.TestCase):
     def test_wrong_number_initials(self):
         self.assertNotEqual(self.name, 'Robert E. E. Liebowitz')
         self.assertNotEqual(self.name, 'R.E.E. Liebowitz')
+
+
+if __name__ == '__main__':
+    unittest.main()
