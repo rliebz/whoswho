@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-from whoswho import who
-from whoswho import config
+from whoswho import who, config, utils
 
 from nameparser.config.titles import TITLES as NAMEPARSER_TITLES
 from nameparser.config.suffixes import SUFFIXES as NAMEPARSER_SUFFIXES
@@ -15,6 +14,7 @@ class TestFullNames(unittest.TestCase):
     def test_unicode(self):
         self.assertTrue(who.is_it(self.name, u'attaché Robert Evan Liebowitz'))
         self.assertTrue(who.is_it(self.name, u'Rōbért Èvān Lîęböwitz'))
+        self.assertFalse(who.is_it(self.name, u'Rōbért Èvān Lęîböwitz'))
 
     def test_name_and_initials(self):
         self.assertTrue(who.is_it(self.name, 'R. Evan Liebowitz'))
@@ -78,6 +78,36 @@ class TestConfig(unittest.TestCase):
             config.MISC_SUFFIXES
         )
         self.assertEqual(all_suffixes, NAMEPARSER_SUFFIXES)
+
+
+class TestUtils(unittest.TestCase):
+
+    def test_equate_initial_to_name(self):
+        self.assertTrue(utils.equate_initial_to_name('r', 'robert'))
+        self.assertTrue(utils.equate_initial_to_name('rob', 'robert'))
+        self.assertFalse(utils.equate_initial_to_name('robbie', 'robert'))
+        self.assertFalse(utils.equate_initial_to_name('bert', 'robert'))
+
+    def test_make_ascii(self):
+        self.assertEqual(
+            utils.make_ascii(u"foo bar .,?;'!@#$%^&*()"),
+            "foo bar .,?;'!@#$%^&*()"
+        )
+        self.assertEqual(
+            utils.make_ascii(u'äèîõù'),
+            'aeiou'
+        )
+
+    def test_strip_punctuation(self):
+        self.assertEqual(
+            utils.strip_punctuation(u'abcde aeiou'),
+            u'abcde aeiou'
+        )
+        self.assertEqual(
+            utils.strip_punctuation(u"abcde.' aeiou"),
+            u'abcde aeiou'
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
