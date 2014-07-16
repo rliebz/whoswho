@@ -1,21 +1,21 @@
 from nameparser import HumanName
 
 from config import UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES
-from utils import equate_initial_to_name, strip_punctuation, make_ascii
+from utils import equate_prefix_to_name, strip_punctuation, make_ascii
 
 
 class Name(object):
 
     def __init__(self, fullname):
-        cleaned_name = strip_punctuation(make_ascii(unicode(fullname)))
-        self.name = HumanName(cleaned_name)
+        ascii_name = make_ascii(unicode(fullname))
+        self.name = HumanName(ascii_name)
 
         # lower after parsing to preserve parsing logic
-        self.name.title = self.name.title.lower()
-        self.name.first = self.name.first.lower()
-        self.name.middle = self.name.middle.lower()
-        self.name.last = self.name.last.lower()
-        self.name.suffix = self.name.suffix.lower()
+        self.name.title = strip_punctuation(self.name.title)
+        self.name.first = strip_punctuation(self.name.first)
+        self.name.middle = strip_punctuation(self.name.middle)
+        self.name.last = strip_punctuation(self.name.last)
+        self.name.suffix = strip_punctuation(self.name.suffix)
 
     def deep_compare(self, other):
         title = self._compare_title(other)
@@ -37,7 +37,7 @@ class Name(object):
         return not (titles & MALE_TITLES and titles & FEMALE_TITLES)
 
     def _compare_first(self, other):
-        return equate_initial_to_name(self.name.first, other.name.first)
+        return equate_prefix_to_name(self.name.first, other.name.first)
 
     def _compare_middle(self, other):
 
@@ -51,7 +51,7 @@ class Name(object):
 
         result = True
         for i, name in enumerate(self.name.middle_list):
-            result &= equate_initial_to_name(name, other.name.middle_list[i])
+            result &= equate_prefix_to_name(name, other.name.middle_list[i])
 
         return result
 

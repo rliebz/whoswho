@@ -26,6 +26,7 @@ class TestFullNames(unittest.TestCase):
         self.assertTrue(who.is_it(self.name, 'R. Liebowitz'))
         self.assertFalse(who.is_it(self.name, 'Robert E. E. Liebowitz'))
         self.assertFalse(who.is_it(self.name, 'R. E. E. Liebowitz'))
+        self.assertTrue(who.is_it('R.E.E. Liebowitz', 'R. E. E. Liebowitz'))
 
     def test_different_initials(self):
         self.assertFalse(who.is_it(self.name, 'E. R. Liebowitz'))
@@ -83,10 +84,10 @@ class TestConfig(unittest.TestCase):
 class TestUtils(unittest.TestCase):
 
     def test_equate_initial_to_name(self):
-        self.assertTrue(utils.equate_initial_to_name('r', 'robert'))
-        self.assertTrue(utils.equate_initial_to_name('rob', 'robert'))
-        self.assertFalse(utils.equate_initial_to_name('robbie', 'robert'))
-        self.assertFalse(utils.equate_initial_to_name('bert', 'robert'))
+        self.assertTrue(utils.equate_prefix_to_name('r', 'robert'))
+        self.assertTrue(utils.equate_prefix_to_name('rob', 'robert'))
+        self.assertFalse(utils.equate_prefix_to_name('robbie', 'robert'))
+        self.assertFalse(utils.equate_prefix_to_name('bert', 'robert'))
 
     def test_make_ascii(self):
         self.assertEqual(

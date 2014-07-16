@@ -2,7 +2,7 @@ import unicodedata
 from config import STRIPPED_CHARACTERS
 
 
-def equate_initial_to_name(name1, name2):
+def equate_prefix_to_name(name1, name2):
     """
     Evaluates whether one name prefixes another
     """
@@ -24,7 +24,7 @@ def make_ascii(word):
 # TODO: Can/should this handle hyphens?
 def strip_punctuation(word):
     """
-    Strips punctuation from name
+    Strips punctuation from name and lower cases it
     """
 
-    return word.translate(STRIPPED_CHARACTERS)
+    return word.translate(STRIPPED_CHARACTERS).lower()
