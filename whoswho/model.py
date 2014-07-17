@@ -1,7 +1,9 @@
 from nameparser import HumanName
+from fuzzywuzzy import fuzz
 
 from config import UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES
-from utils import equate_prefix_to_name, strip_punctuation, make_ascii
+from utils import (equate_initial_to_name, equate_prefix_to_name, make_ascii,
+                   strip_punctuation)
 
 
 class Name(object):
@@ -10,7 +12,7 @@ class Name(object):
         ascii_name = make_ascii(unicode(fullname))
         self.name = HumanName(ascii_name)
 
-        # lower after parsing to preserve parsing logic
+        # Format after parsing to preserve parsing logic
         self.name.title = strip_punctuation(self.name.title)
         self.name.first = strip_punctuation(self.name.first)
         self.name.middle = strip_punctuation(self.name.middle)
@@ -18,6 +20,14 @@ class Name(object):
         self.name.suffix = strip_punctuation(self.name.suffix)
 
     def deep_compare(self, other):
+        """
+        Compares each field of the name one at a time to see if they match.
+        Each name field has context-specific comparison logic.
+
+        :param Name other: other Name for comparison
+        :return bool: whether the two names are compatible
+        """
+
         title = self._compare_title(other)
         first = self._compare_first(other)
         middle = self._compare_middle(other)
@@ -26,7 +36,35 @@ class Name(object):
 
         return title and first and middle and last and suffix
 
+    def ratio_deep_compare(self, other):
+        """
+        Compares each field of the name one at a time to see if they match.
+        Each name field has context-specific comparison logic.
+
+        :param Name other: other Name for comparison
+        :return int: ratio fuzzy match (out of 100)
+        """
+
+        title = self._compare_title(other)
+        first = self._compare_first(other, ratio=True)
+        middle = self._compare_middle(other, ratio=True)
+        last = self._compare_last(other, ratio=True)
+        suffix = self._compare_suffix(other)
+
+        first_length = len(self.name.first) + len(other.name.first)
+        middle_length = len(self.name.middle) + len(other.name.middle)
+        last_length = len(self.name.last) + len(other.name.last)
+        total_length = first_length + middle_length + last_length
+
+        name_weight = (
+            first * first_length + middle * middle_length + last * last_length
+        ) / total_length
+
+        # Title and suffix are used as exclusionary criteria
+        return (title and suffix) * name_weight
+
     def _compare_title(self, other):
+        """Return False if titles have different gender associations"""
 
         # If title is omitted, assume a match
         if not self.name.title or not other.name.title:
@@ -36,10 +74,14 @@ class Name(object):
 
         return not (titles & MALE_TITLES and titles & FEMALE_TITLES)
 
-    def _compare_first(self, other):
-        return equate_prefix_to_name(self.name.first, other.name.first)
+    def _compare_first(self, other, ratio=False):
+        """Compares first names allowing for partial-matching"""
 
-    def _compare_middle(self, other):
+        comparison = fuzz.partial_ratio if ratio else equate_prefix_to_name
+        return comparison(self.name.first, other.name.first)
+
+    def _compare_middle(self, other, ratio=False):
+        """Compare middle name list allowing for initials"""
 
         # If middle initial is omitted, assume a match
         if not self.name.middle or not other.name.middle:
@@ -50,15 +92,20 @@ class Name(object):
             return False
 
         result = True
+        comparison = fuzz.partial_ratio if ratio else equate_initial_to_name
         for i, name in enumerate(self.name.middle_list):
-            result &= equate_prefix_to_name(name, other.name.middle_list[i])
+            result *= comparison(name, other.name.middle_list[i])
 
         return result
 
-    def _compare_last(self, other):
-        return self.name.last == other.name.last
+    def _compare_last(self, other, ratio=False):
+        """Compare last names directly"""
+
+        comparison = fuzz.ratio if ratio else lambda x, y: x == y
+        return comparison(self.name.last, other.name.last)
 
     def _compare_suffix(self, other):
+        """Return false if suffixes are mutually exclusive"""
 
         # If suffix is omitted, assume a match
         if not self.name.suffix or not other.name.suffix:

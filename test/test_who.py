@@ -73,7 +73,7 @@ class TestConfig(unittest.TestCase):
         )
         assert_equal(all_titles, NAMEPARSER_TITLES)
 
-    def test_titles_all_defined(self):
+    def test_suffixes_all_defined(self):
         """
         Check if list of suffixes is up to date with nameparser
         """
@@ -111,6 +111,14 @@ class TestUtils(unittest.TestCase):
             utils.strip_punctuation(u"abcde.' aeiou"),
             u'abcde aeiou'
         )
+
+    def test_equate_nickname(self):
+        assert_true(utils.equate_nickname('robert', 'rob'))
+        assert_true(utils.equate_nickname('robert', 'robby'))
+        assert_true(utils.equate_nickname('robert', 'robbie'))
+        assert_true(utils.equate_nickname('robbie', 'robby'))
+        assert_false(utils.equate_nickname('robert', 'robin'))
+        assert_false(utils.equate_nickname('harold', 'harriet'))
 
 
 if __name__ == '__main__':
