@@ -87,10 +87,10 @@ class TestConfig(unittest.TestCase):
 class TestUtils(unittest.TestCase):
 
     def test_equate_prefix_to_name(self):
-        assert_true(utils.equate_prefix_to_name('r', 'robert'))
-        assert_true(utils.equate_prefix_to_name('rob', 'robert'))
-        assert_false(utils.equate_prefix_to_name('robbie', 'robert'))
-        assert_false(utils.equate_prefix_to_name('bert', 'robert'))
+        assert_true(utils.equate_prefix('r', 'robert'))
+        assert_true(utils.equate_prefix('rob', 'robert'))
+        assert_false(utils.equate_prefix('robbie', 'robert'))
+        assert_false(utils.equate_prefix('bert', 'robert'))
 
     def test_make_ascii(self):
         assert_equal(
