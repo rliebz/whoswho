@@ -94,10 +94,10 @@ class Name(object):
         # Check if more than one unique suffix
         suffix_set = set(self.name.suffix_list + other.name.suffix_list)
         unique_suffixes = suffix_set & UNIQUE_SUFFIXES
-        for key, value in EQUIVALENT_SUFFIXES.iteritems():
+        for key in EQUIVALENT_SUFFIXES.keys():
             if key in unique_suffixes:
                 unique_suffixes.remove(key)
-                unique_suffixes.add(value)
+                unique_suffixes.add(EQUIVALENT_SUFFIXES[key])
 
         return len(unique_suffixes) < 2
 
