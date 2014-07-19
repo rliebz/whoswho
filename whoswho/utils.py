@@ -7,7 +7,9 @@ from config import STRIPPED_CHARACTERS
 
 
 def compare_name_component(list1, list2, settings, ratio=False):
-
+    """
+    Compare a list of names from a name component based on settings
+    """
     if not list1[0] or not list2[0]:
         result = not settings['required']
         return result * 100 if ratio else result
@@ -15,30 +17,35 @@ def compare_name_component(list1, list2, settings, ratio=False):
     if len(list1) != len(list2):
         return False
 
-    num_names = len(list1)
-
     if ratio:
         result = 0
-        for i in range(num_names):
-            if settings['allow_prefix']:
-                result += fuzz.partial_ratio(list1[i], list2[i])
-            elif settings['allow_initials']:
-                initials = equate_initial(list1[i], list2[i])
-                result += 100 if initials else fuzz.ratio(list1[i], list2[i])
-            else:
-                result += fuzz.ratio(list1[i], list2[i])
+        for i, n1 in enumerate(list1):
+            n2 = list2[i]
 
-        result /= num_names
+            # If initials don't match, result for this item is 0
+            if (len(n1) == 1 or len(n2) == 1) and not equate_initial(n1, n2):
+                continue
+
+            if settings['allow_prefix']:
+                result += 100 if equate_prefix(n1, n2) else fuzz.ratio(n1, n2)
+            elif settings['allow_initials']:
+                result += 100 if equate_initial(n1, n2) else fuzz.ratio(n1, n2)
+            else:
+                result += fuzz.ratio(n1, n2)
+
+        result /= len(list1)
 
     else:
         result = True
-        for i in range(num_names):
+        for i, n1 in enumerate(list1):
+            n2 = list2[i]
+
             if settings['allow_prefix']:
-                result &= equate_prefix(list1[i], list2[i])
+                result &= equate_prefix(n1, n2)
             elif settings['allow_initials']:
-                result &= equate_initial(list1[i], list2[i])
+                result &= equate_initial(n1, n2)
             else:
-                result &= list1[i] == list2[i]
+                result &= n1 == n2
 
     return result
 
@@ -68,7 +75,11 @@ def equate_prefix(name1, name2):
 
 
 def equate_nickname(name1, name2):
+    """
+    Evaluates whether names match based on common nickname patterns
 
+    This is not currently used in any name comparison.
+    """
     # Convert '-ie' and '-y' to the root name
     nickname_regex = r'(.)\1(y|ie)$'
     root_regex = r'\1'

@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 
 UNIQUE_SUFFIXES = {
     'jr',
-    'jnr',
+    'jnr',  # TODO: compatible with jr
     'sr',
-    'snr',
+    'snr',  # TODO: compatible with sr
     '2',
     'i',
     'ii',
