@@ -2,18 +2,18 @@
 from __future__ import unicode_literals
 
 
-UNIQUE_SUFFIXES = {
+UNIQUE_SUFFIXES = set([
     'jr',
-    'jnr',  # TODO: compatible with jr
+    'jnr',
     'sr',
-    'snr',  # TODO: compatible with sr
+    'snr',
     '2',
     'i',
     'ii',
     'iii',
     'iv',
     'v',
-}
+])
 """
 A set of suffixes that should be mutually exclusive, which is a
 subset of nameparser's set of suffixes.
@@ -23,7 +23,17 @@ but differing titles do not necessarily indicate different people.
 """
 
 
-MISC_SUFFIXES = {
+EQUIVALENT_SUFFIXES = {
+    'jnr': 'jr',
+    'snr': 'sr',
+}
+"""
+A dict of equivalent suffixes. Keys will be converted to values when
+suffixes are compared.
+"""
+
+
+MISC_SUFFIXES = set([
     'esq',
     'esquire',
     'clu',
@@ -37,7 +47,7 @@ MISC_SUFFIXES = {
     'do',
     'dds',
     'dpm',
-}
+])
 """
 Non-unique suffixes kept to ensure the set is up to date with nameparser
 """

@@ -1,13 +1,17 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from nameparser import HumanName
 
-from whoswho.config import UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES
+from whoswho.config import (UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES,
+                            EQUIVALENT_SUFFIXES)
 from whoswho.utils import make_ascii, strip_punctuation, compare_name_component
 
 
 class Name(object):
 
     def __init__(self, fullname):
-        ascii_name = make_ascii(unicode(fullname))
+        ascii_name = make_ascii(fullname)
         self.name = HumanName(ascii_name)
 
         # Format after parsing to preserve parsing logic
@@ -39,7 +43,7 @@ class Name(object):
         Each name field has context-specific comparison logic.
 
         :param Name other: other Name for comparison
-        :return int: ratio fuzzy match (out of 100)
+        :return int: sequence ratio match (out of 100)
         """
 
         if not self._is_compatible_with(other):
@@ -88,8 +92,12 @@ class Name(object):
             return True
 
         # Check if more than one unique suffix
-        suffix_list = self.name.suffix_list + other.name.suffix_list
-        unique_suffixes = {s for s in suffix_list if s in UNIQUE_SUFFIXES}
+        suffix_set = set(self.name.suffix_list + other.name.suffix_list)
+        unique_suffixes = suffix_set & UNIQUE_SUFFIXES
+        for key in EQUIVALENT_SUFFIXES.keys():
+            if key in unique_suffixes:
+                unique_suffixes.remove(key)
+                unique_suffixes.add(EQUIVALENT_SUFFIXES[key])
 
         return len(unique_suffixes) < 2
 

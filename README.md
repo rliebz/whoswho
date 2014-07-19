@@ -1,7 +1,13 @@
 WhosWho
 ==========
+[![PyPI version](https://badge.fury.io/py/whoswho.svg)]
+  (http://badge.fury.io/py/whoswho)
+[![Build Status](https://travis-ci.org/rliebz/whoswho.svg?branch=master)]
+  (https://travis-ci.org/rliebz/whoswho)
+
 A simple python library for determining whether two names describe the same 
 person.
+
 
 Installation
 ----------
@@ -9,6 +15,7 @@ Installation
 ```bash
 $ pip install whoswho
 ```
+Requires Python >= 2.6 or >= 3.3 with pip.
 
 
 Usage
@@ -33,7 +40,6 @@ True
 False
 ```
 
-
 ### Fuzzy Matching ###
 
 WhosWho can also produce a ratio based on the percent match of two names.
@@ -43,6 +49,7 @@ WhosWho can also produce a ratio based on the percent match of two names.
 >>> who.ratio('E. Robert Lebovich', 'Robert E. Liebowitz')
 29
 ```
+
 
 License
 -------
