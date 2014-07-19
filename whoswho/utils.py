@@ -3,7 +3,7 @@ import unicodedata
 
 from fuzzywuzzy import fuzz
 
-from config import STRIPPED_CHARACTERS
+from whoswho.config import STRIPPED_CHARACTERS
 
 
 def compare_name_component(list1, list2, settings, ratio=False):

@@ -1,6 +1,15 @@
 WhosWho
 ==========
-A simple python library for checking if two names describe the same person.
+A simple python library for determining whether two names describe the same 
+person.
+
+Installation
+----------
+
+```bash
+$ pip install whoswho
+```
+
 
 Usage
 ----------

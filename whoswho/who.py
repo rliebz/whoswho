@@ -1,5 +1,5 @@
-from model import Name
-from config import SETTINGS
+from whoswho.model import Name
+from whoswho.config import SETTINGS
 
 
 def match(fullname1, fullname2, strictness='default'):

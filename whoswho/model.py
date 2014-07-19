@@ -1,7 +1,7 @@
 from nameparser import HumanName
 
-from config import UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES
-from utils import make_ascii, strip_punctuation, compare_name_component
+from whoswho.config import UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES
+from whoswho.utils import make_ascii, strip_punctuation, compare_name_component
 
 
 class Name(object):
