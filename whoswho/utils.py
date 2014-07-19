@@ -103,7 +103,9 @@ def make_ascii(word):
     if sys.version_info < (3,0,0):
         word = unicode(word)
 
-    return unicodedata.normalize('NFKD', word).encode('ascii', 'ignore')
+    normalized = unicodedata.normalize('NFKD', word)
+
+    return normalized.encode('ascii', 'ignore').decode('utf-8')
 
 
 def strip_punctuation(word):

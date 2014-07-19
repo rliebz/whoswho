@@ -17,7 +17,7 @@ class TestFullNames(unittest.TestCase):
         self.name = 'Robert Evan Liebowitz'
 
     def test_string(self):
-        assert_true(who.match(self.name, bytes('Robert Evan Liebowitz')))
+        assert_true(who.match(self.name, 'Robert Liebowitz'.encode('utf-8')))
 
     def test_unicode(self):
         name = self.name
