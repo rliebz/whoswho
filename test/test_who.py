@@ -15,49 +15,49 @@ class TestFullNames(unittest.TestCase):
         self.name = 'Robert Evan Liebowitz'
 
     def test_unicode(self):
-        assert_true(who.is_it(self.name, u'attaché Robert Evan Liebowitz'))
-        assert_true(who.is_it(self.name, u'Rōbért Èvān Lîęböwitz'))
-        assert_false(who.is_it(self.name, u'Rōbért Èvān Lęîböwitz'))
+        assert_true(who.match(self.name, u'attaché Robert Evan Liebowitz'))
+        assert_true(who.match(self.name, u'Rōbért Èvān Lîęböwitz'))
+        assert_false(who.match(self.name, u'Rōbért Èvān Lęîböwitz'))
 
     def test_name_and_initials(self):
-        assert_true(who.is_it(self.name, 'R. Evan Liebowitz'))
-        assert_true(who.is_it(self.name, 'Robert E. Liebowitz'))
-        assert_true(who.is_it(self.name, 'R. E. Liebowitz'))
+        assert_true(who.match(self.name, 'R. Evan Liebowitz'))
+        assert_true(who.match(self.name, 'Robert E. Liebowitz'))
+        assert_true(who.match(self.name, 'R. E. Liebowitz'))
 
     def test_different_number_initials(self):
-        assert_true(who.is_it(self.name, 'Robert Liebowitz'))
-        assert_true(who.is_it(self.name, 'R. Liebowitz'))
-        assert_false(who.is_it(self.name, 'Robert E. E. Liebowitz'))
-        assert_false(who.is_it(self.name, 'R. E. E. Liebowitz'))
-        assert_true(who.is_it('R.E.E. Liebowitz', 'R. E. E. Liebowitz'))
+        assert_true(who.match(self.name, 'Robert Liebowitz'))
+        assert_true(who.match(self.name, 'R. Liebowitz'))
+        assert_false(who.match(self.name, 'Robert E. E. Liebowitz'))
+        assert_false(who.match(self.name, 'R. E. E. Liebowitz'))
+        assert_true(who.match('R.E.E. Liebowitz', 'R. E. E. Liebowitz'))
 
     def test_different_initials(self):
-        assert_false(who.is_it(self.name, 'E. R. Liebowitz'))
-        assert_false(who.is_it(self.name, 'E. Liebowitz'))
-        assert_false(who.is_it(self.name, 'R. V. Liebowitz'))
-        assert_false(who.is_it(self.name, 'O. E. Liebowitz'))
+        assert_false(who.match(self.name, 'E. R. Liebowitz'))
+        assert_false(who.match(self.name, 'E. Liebowitz'))
+        assert_false(who.match(self.name, 'R. V. Liebowitz'))
+        assert_false(who.match(self.name, 'O. E. Liebowitz'))
 
     def test_short_names(self):
-        assert_true(who.is_it(self.name, 'Rob Liebowitz'))
+        assert_true(who.match(self.name, 'Rob Liebowitz'))
         # TODO: Should these be true?
-        assert_false(who.is_it(self.name, 'Bert Liebowitz'))
-        assert_false(who.is_it(self.name, 'Robbie Liebowitz'))
+        assert_false(who.match(self.name, 'Bert Liebowitz'))
+        assert_false(who.match(self.name, 'Robbie Liebowitz'))
 
     def test_suffixes(self):
         name = 'Robert Liebowitz Jr'
-        assert_true(who.is_it(name, 'Robert Liebowitz'))
-        assert_true(who.is_it(name, 'Robert Liebowitz Jr'))
-        assert_true(who.is_it(name, 'Robert Liebowitz, PhD'))
-        assert_false(who.is_it(name, 'Robert Liebowitz, Sr'))
-        assert_false(who.is_it(name, 'Robert Liebowitz, Sr, PhD'))
-        assert_true(who.is_it(name, 'Robert Liebowitz, Jr, PhD'))
+        assert_true(who.match(name, 'Robert Liebowitz'))
+        assert_true(who.match(name, 'Robert Liebowitz Jr'))
+        assert_true(who.match(name, 'Robert Liebowitz, PhD'))
+        assert_false(who.match(name, 'Robert Liebowitz, Sr'))
+        assert_false(who.match(name, 'Robert Liebowitz, Sr, PhD'))
+        assert_true(who.match(name, 'Robert Liebowitz, Jr, PhD'))
 
     def test_titles(self):
         name = 'Mr. Robert Liebowitz'
-        assert_true(who.is_it(name, 'Robert Liebowitz'))
-        assert_true(who.is_it(name, 'Sir Robert Liebowitz'))
-        assert_true(who.is_it(name, 'Dr. Robert Liebowitz'))
-        assert_false(who.is_it(name, 'Mrs. Robert Liebowitz'))
+        assert_true(who.match(name, 'Robert Liebowitz'))
+        assert_true(who.match(name, 'Sir Robert Liebowitz'))
+        assert_true(who.match(name, 'Dr. Robert Liebowitz'))
+        assert_false(who.match(name, 'Mrs. Robert Liebowitz'))
 
 
 class TestConfig(unittest.TestCase):

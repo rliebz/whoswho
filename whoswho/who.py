@@ -1,7 +1,7 @@
 from model import Name
 
 
-def is_it(fullname1, fullname2):
+def match(fullname1, fullname2):
     """
     Takes two names and returns true if they describe the same person.
 
@@ -16,7 +16,7 @@ def is_it(fullname1, fullname2):
     return n1.deep_compare(n2)
 
 
-def can_it_be(fullname1, fullname2):
+def ratio(fullname1, fullname2):
     """
     Takes two names and returns true if they describe the same person.
     Uses fuzzywuzzy's fuzzy matching on a per-field basis for names

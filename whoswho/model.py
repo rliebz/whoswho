@@ -28,13 +28,18 @@ class Name(object):
         :return bool: whether the two names are compatible
         """
 
+        # Exclusionary criteria
         title = self._compare_title(other)
+        suffix = self._compare_suffix(other)
+
+        if not title or not suffix:
+            return False
+
         first = self._compare_first(other)
         middle = self._compare_middle(other)
         last = self._compare_last(other)
-        suffix = self._compare_suffix(other)
 
-        return title and first and middle and last and suffix
+        return first and middle and last
 
     def ratio_deep_compare(self, other):
         """
@@ -45,23 +50,28 @@ class Name(object):
         :return int: ratio fuzzy match (out of 100)
         """
 
+        # Exclusionary criteria
         title = self._compare_title(other)
+        suffix = self._compare_suffix(other)
+
+        if not title or not suffix:
+            return 0
+
         first = self._compare_first(other, ratio=True)
         middle = self._compare_middle(other, ratio=True)
         last = self._compare_last(other, ratio=True)
-        suffix = self._compare_suffix(other)
 
-        first_length = len(self.name.first) + len(other.name.first)
-        middle_length = len(self.name.middle) + len(other.name.middle)
-        last_length = len(self.name.last) + len(other.name.last)
-        total_length = first_length + middle_length + last_length
+        # TODO: Make name weighting configurable
+        first_weight = 1
+        middle_weight = 1 if self.name.middle and other.name.middle else 0
+        last_weight = 1
+        total_weight = first_weight + middle_weight + last_weight
 
         name_weight = (
-            first * first_length + middle * middle_length + last * last_length
-        ) / total_length
+            first * first_weight + middle * middle_weight + last * last_weight
+        ) / total_weight
 
-        # Title and suffix are used as exclusionary criteria
-        return (title and suffix) * name_weight
+        return name_weight
 
     def _compare_title(self, other):
         """Return False if titles have different gender associations"""
