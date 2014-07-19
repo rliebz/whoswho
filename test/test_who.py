@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import nose
 from nose.tools import *
 import unittest
+import sys
 
 from whoswho import who, config, utils
 
@@ -17,7 +18,8 @@ class TestFullNames(unittest.TestCase):
         self.name = 'Robert Evan Liebowitz'
 
     def test_string(self):
-        assert_true(who.match(self.name, 'Robert Liebowitz'.encode('utf-8')))
+        # Only relevant for python 2.X
+        assert_true(who.match(self.name, str('Robert Liebowitz')))
 
     def test_unicode(self):
         name = self.name
