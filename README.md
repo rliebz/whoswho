@@ -43,3 +43,10 @@ WhosWho can also produce a ratio based on the percent match of two names.
 >>> who.ratio('E. Robert Lebovich', 'Robert E. Liebowitz')
 29
 ```
+
+License
+-------
+
+MIT licensed. See the bundled 
+[LICENSE](https://github.com/rliebz/whoswho/blob/master/LICENSE) 
+file for more details.
