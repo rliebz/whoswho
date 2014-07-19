@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-REQUIREMENTS = ['nameparser', 'fuzzywuzzy']
+REQUIREMENTS = ['nameparser']
 TEST_REQUIREMENTS = ['nose']
 
 setup(

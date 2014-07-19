@@ -40,7 +40,7 @@ class Name(object):
         Each name field has context-specific comparison logic.
 
         :param Name other: other Name for comparison
-        :return int: ratio fuzzy match (out of 100)
+        :return int: sequence ratio match (out of 100)
         """
 
         if not self._is_compatible_with(other):

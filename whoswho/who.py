@@ -22,11 +22,11 @@ def match(fullname1, fullname2, strictness='default'):
 def ratio(fullname1, fullname2, strictness='default'):
     """
     Takes two names and returns true if they describe the same person.
-    Uses fuzzywuzzy's fuzzy matching on a per-field basis for names
+    Uses difflib's sequence matching on a per-field basis for names
 
     :param string fullname1: first human name
     :param string fullname2: second human name
-    :return int: ratio fuzzy match (out of 100)
+    :return int: sequence ratio match (out of 100)
     """
 
     settings = SETTINGS[strictness]

@@ -1,7 +1,6 @@
 import re
 import unicodedata
-
-from fuzzywuzzy import fuzz
+from difflib import SequenceMatcher
 
 from whoswho.config import STRIPPED_CHARACTERS
 
@@ -27,11 +26,11 @@ def compare_name_component(list1, list2, settings, ratio=False):
                 continue
 
             if settings['allow_prefix']:
-                result += 100 if equate_prefix(n1, n2) else fuzz.ratio(n1, n2)
+                result += 100 if equate_prefix(n1, n2) else seq_ratio(n1, n2)
             elif settings['allow_initials']:
-                result += 100 if equate_initial(n1, n2) else fuzz.ratio(n1, n2)
+                result += 100 if equate_initial(n1, n2) else seq_ratio(n1, n2)
             else:
-                result += fuzz.ratio(n1, n2)
+                result += seq_ratio(n1, n2)
 
         result /= len(list1)
 
@@ -107,3 +106,11 @@ def strip_punctuation(word):
     """
 
     return word.translate(STRIPPED_CHARACTERS).lower()
+
+
+def seq_ratio(word1, word2):
+    """
+    Returns sequence match ratio for two words
+    """
+    raw_ratio = SequenceMatcher(None, word1, word2).ratio()
+    return int(round(100 * raw_ratio))
