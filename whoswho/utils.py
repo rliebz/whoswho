@@ -103,7 +103,7 @@ def make_ascii(word):
     if sys.version_info < (3,0,0):
         word = unicode(word)
     else:
-        word = word.decode('utf-8')
+        word = str(word)
 
     normalized = unicodedata.normalize('NFKD', word)
 
