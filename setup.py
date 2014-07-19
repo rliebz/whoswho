@@ -15,9 +15,16 @@ setup(
     install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
     classifiers=(
+        'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-    )
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Text Processing :: Linguistic',
+    ),
+    keywords=['whoswho', 'name', 'match', 'parser']
 )

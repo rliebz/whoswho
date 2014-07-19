@@ -9,7 +9,7 @@ Installation
 ```bash
 $ pip install whoswho
 ```
-
+Requires Python >= 2.6 or >= 3.3 with pip.
 
 Usage
 ----------
