@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 
 UNIQUE_SUFFIXES = {
     'jr',
-    'jnr',  # TODO: compatible with jr
+    'jnr',
     'sr',
-    'snr',  # TODO: compatible with sr
+    'snr',
     '2',
     'i',
     'ii',
@@ -20,6 +20,16 @@ subset of nameparser's set of suffixes.
 
 Suffixes that are actually titles are included as suffixes by nameparser,
 but differing titles do not necessarily indicate different people.
+"""
+
+
+EQUIVALENT_SUFFIXES = {
+    'jnr': 'jr',
+    'snr': 'sr',
+}
+"""
+A dict of equivalent suffixes. Keys will be converted to values when
+suffixes are compared.
 """
 
 

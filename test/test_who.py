@@ -52,6 +52,11 @@ class TestFullNames(unittest.TestCase):
         assert_false(who.match(name, 'Robert Liebowitz, Sr, PhD'))
         assert_true(who.match(name, 'Robert Liebowitz, Jr, PhD'))
 
+    def test_equivalent_suffixes(self):
+        name = 'Robert Liebowitz Jr'
+        assert_true(who.match(name, 'Robert Liebowitz Jnr'))
+        assert_false(who.match(name, 'Robert Liebowitz Snr'))
+
     def test_titles(self):
         name = 'Mr. Robert Liebowitz'
         assert_true(who.match(name, 'Robert Liebowitz'))

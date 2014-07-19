@@ -1,6 +1,7 @@
 from nameparser import HumanName
 
-from whoswho.config import UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES
+from whoswho.config import (UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES,
+                            EQUIVALENT_SUFFIXES)
 from whoswho.utils import make_ascii, strip_punctuation, compare_name_component
 
 
@@ -88,8 +89,12 @@ class Name(object):
             return True
 
         # Check if more than one unique suffix
-        suffix_list = self.name.suffix_list + other.name.suffix_list
-        unique_suffixes = {s for s in suffix_list if s in UNIQUE_SUFFIXES}
+        suffix_set = set(self.name.suffix_list + other.name.suffix_list)
+        unique_suffixes = suffix_set & UNIQUE_SUFFIXES
+        for key, value in EQUIVALENT_SUFFIXES.iteritems():
+            if key in unique_suffixes:
+                unique_suffixes.remove(key)
+                unique_suffixes.add(value)
 
         return len(unique_suffixes) < 2
 
