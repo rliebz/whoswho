@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 
-UNIQUE_SUFFIXES = {
+UNIQUE_SUFFIXES = set([
     'jr',
     'jnr',
     'sr',
@@ -13,7 +13,7 @@ UNIQUE_SUFFIXES = {
     'iii',
     'iv',
     'v',
-}
+])
 """
 A set of suffixes that should be mutually exclusive, which is a
 subset of nameparser's set of suffixes.
@@ -33,7 +33,7 @@ suffixes are compared.
 """
 
 
-MISC_SUFFIXES = {
+MISC_SUFFIXES = set([
     'esq',
     'esquire',
     'clu',
@@ -47,7 +47,7 @@ MISC_SUFFIXES = {
     'do',
     'dds',
     'dpm',
-}
+])
 """
 Non-unique suffixes kept to ensure the set is up to date with nameparser
 """

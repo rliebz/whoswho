@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 
-MALE_TITLES = {
+MALE_TITLES = set([
     'sir',
     'king',
     'master',
@@ -26,10 +26,10 @@ MALE_TITLES = {
     "marquess",
     "marquise",
     'abbot',
-}
+])
 
 
-FEMALE_TITLES = {
+FEMALE_TITLES = set([
     'dame',
     'queen',
     'maid',
@@ -55,7 +55,7 @@ FEMALE_TITLES = {
     'goodwife',
     "marchioness",
     'abbess',
-}
+])
 """
 Sets of titles that are either exclusively male or exclusively female,
 which are subsets of nameparser's set of titles.
@@ -65,7 +65,7 @@ set of titles from nameparser in case it changes.
 """
 
 # TODO: Gender-specific titles may still be in this list.
-GENDERLESS_TITLES = {
+GENDERLESS_TITLES = set([
     'dr',
     'doctor',
     'rev',
@@ -409,4 +409,4 @@ GENDERLESS_TITLES = {
     'mag-judge',
     'senior-judge',
     'mag/judge',
-}
+])
