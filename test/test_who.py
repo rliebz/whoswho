@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import nose
 from nose.tools import *
 import unittest
+import sys
 
 from whoswho import who, config, utils
 
@@ -14,10 +17,15 @@ class TestFullNames(unittest.TestCase):
     def setUp(self):
         self.name = 'Robert Evan Liebowitz'
 
+    def test_string(self):
+        # Only relevant for python 2.X
+        assert_true(who.match(self.name, str('Robert Liebowitz')))
+
     def test_unicode(self):
-        assert_true(who.match(self.name, u'attaché Robert Evan Liebowitz'))
-        assert_true(who.match(self.name, u'Rōbért Èvān Lîęböwitz'))
-        assert_false(who.match(self.name, u'Rōbért Èvān Lęîböwitz'))
+        name = self.name
+        assert_true(who.match(name, 'attaché Robert Evan Liebowitz'))
+        assert_true(who.match(name, 'Rōbért Èvān Lîęböwitz'))
+        assert_false(who.match(name, 'Rōbért Èvān Lęîböwitz'))
 
     def test_name_and_initials(self):
         assert_true(who.match(self.name, 'R. Evan Liebowitz'))
@@ -51,6 +59,11 @@ class TestFullNames(unittest.TestCase):
         assert_false(who.match(name, 'Robert Liebowitz, Sr'))
         assert_false(who.match(name, 'Robert Liebowitz, Sr, PhD'))
         assert_true(who.match(name, 'Robert Liebowitz, Jr, PhD'))
+
+    def test_equivalent_suffixes(self):
+        name = 'Robert Liebowitz Jr'
+        assert_true(who.match(name, 'Robert Liebowitz Jnr'))
+        assert_false(who.match(name, 'Robert Liebowitz Snr'))
 
     def test_titles(self):
         name = 'Mr. Robert Liebowitz'
@@ -94,22 +107,22 @@ class TestUtils(unittest.TestCase):
 
     def test_make_ascii(self):
         assert_equal(
-            utils.make_ascii(u"foo bar .,?;'!@#$%^&*()"),
+            utils.make_ascii("foo bar .,?;'!@#$%^&*()"),
             "foo bar .,?;'!@#$%^&*()"
         )
         assert_equal(
-            utils.make_ascii(u'äèîõù'),
+            utils.make_ascii('äèîõù'),
             'aeiou'
         )
 
     def test_strip_punctuation(self):
         assert_equal(
-            utils.strip_punctuation(u'abcde aeiou'),
-            u'abcde aeiou'
+            utils.strip_punctuation('abcde aeiou'),
+            'abcde aeiou'
         )
         assert_equal(
-            utils.strip_punctuation(u"abcde.' aeiou"),
-            u'abcde aeiou'
+            utils.strip_punctuation("abcde.' aeiou"),
+            'abcde aeiou'
         )
 
     def test_equate_nickname(self):
