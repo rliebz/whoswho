@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from nameparser import HumanName
 
 from whoswho.config import (UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES,
@@ -8,7 +11,7 @@ from whoswho.utils import make_ascii, strip_punctuation, compare_name_component
 class Name(object):
 
     def __init__(self, fullname):
-        ascii_name = make_ascii(unicode(fullname))
+        ascii_name = make_ascii(fullname)
         self.name = HumanName(ascii_name)
 
         # Format after parsing to preserve parsing logic

@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import sys
 import re
 import unicodedata
 from difflib import SequenceMatcher
@@ -96,8 +100,10 @@ def make_ascii(word):
     """
     Converts unicode-specific characters to their equivalent ascii
     """
-    ascii_word = unicodedata.normalize('NFKD', word).encode('ascii', 'ignore')
-    return unicode(ascii_word)
+    if sys.version_info < (3,0,0):
+        word = unicode(word)
+
+    return unicodedata.normalize('NFKD', word).encode('ascii', 'ignore')
 
 
 def strip_punctuation(word):

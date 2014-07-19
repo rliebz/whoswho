@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import nose
 from nose.tools import *
 import unittest
@@ -14,10 +16,14 @@ class TestFullNames(unittest.TestCase):
     def setUp(self):
         self.name = 'Robert Evan Liebowitz'
 
+    def test_string(self):
+        assert_true(who.match(self.name, bytes('Robert Evan Liebowitz')))
+
     def test_unicode(self):
-        assert_true(who.match(self.name, u'attaché Robert Evan Liebowitz'))
-        assert_true(who.match(self.name, u'Rōbért Èvān Lîęböwitz'))
-        assert_false(who.match(self.name, u'Rōbért Èvān Lęîböwitz'))
+        name = self.name
+        assert_true(who.match(name, 'attaché Robert Evan Liebowitz'))
+        assert_true(who.match(name, 'Rōbért Èvān Lîęböwitz'))
+        assert_false(who.match(name, 'Rōbért Èvān Lęîböwitz'))
 
     def test_name_and_initials(self):
         assert_true(who.match(self.name, 'R. Evan Liebowitz'))
@@ -99,22 +105,22 @@ class TestUtils(unittest.TestCase):
 
     def test_make_ascii(self):
         assert_equal(
-            utils.make_ascii(u"foo bar .,?;'!@#$%^&*()"),
+            utils.make_ascii("foo bar .,?;'!@#$%^&*()"),
             "foo bar .,?;'!@#$%^&*()"
         )
         assert_equal(
-            utils.make_ascii(u'äèîõù'),
+            utils.make_ascii('äèîõù'),
             'aeiou'
         )
 
     def test_strip_punctuation(self):
         assert_equal(
-            utils.strip_punctuation(u'abcde aeiou'),
-            u'abcde aeiou'
+            utils.strip_punctuation('abcde aeiou'),
+            'abcde aeiou'
         )
         assert_equal(
-            utils.strip_punctuation(u"abcde.' aeiou"),
-            u'abcde aeiou'
+            utils.strip_punctuation("abcde.' aeiou"),
+            'abcde aeiou'
         )
 
     def test_equate_nickname(self):
