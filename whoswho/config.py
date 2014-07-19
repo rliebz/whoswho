@@ -11,7 +11,9 @@ names.
 
 UNIQUE_SUFFIXES = {
     'jr',
+    'jnr',
     'sr',
+    'snr',
     '2',
     'i',
     'ii',
@@ -38,6 +40,10 @@ MISC_SUFFIXES = {
     'phd',
     'mp',
     'qc',
+    'dmd',
+    'do',
+    'dds',
+    'dpm',
 }
 """
 Non-unique suffixes kept to ensure the set is up to date with nameparser
