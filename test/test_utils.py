@@ -48,7 +48,7 @@ class TestUtils(unittest.TestCase):
         utils.deep_update_dict(default, {'one': 'a', 'three': {'four': 'b'}})
         assert_equal(default['one'], 'a')
         assert_equal(default['two'], 2)
-        assert_is_instance(default['three'], dict)
+        assert_equal(type(default['three']), dict)
         assert_equal(default['three']['four'], 'b')
         assert_equal(default['three']['five'], 5)
 
