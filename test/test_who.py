@@ -4,9 +4,8 @@ from __future__ import unicode_literals
 import nose
 from nose.tools import *
 import unittest
-import sys
 
-from whoswho import who, config, utils
+from whoswho import who, config
 
 from nameparser.config.titles import TITLES as NAMEPARSER_TITLES
 from nameparser.config.suffixes import SUFFIXES as NAMEPARSER_SUFFIXES
@@ -95,43 +94,6 @@ class TestConfig(unittest.TestCase):
             config.MISC_SUFFIXES
         )
         assert_equal(all_suffixes, NAMEPARSER_SUFFIXES)
-
-
-class TestUtils(unittest.TestCase):
-
-    def test_equate_prefix_to_name(self):
-        assert_true(utils.equate_prefix('r', 'robert'))
-        assert_true(utils.equate_prefix('rob', 'robert'))
-        assert_false(utils.equate_prefix('robbie', 'robert'))
-        assert_false(utils.equate_prefix('bert', 'robert'))
-
-    def test_make_ascii(self):
-        assert_equal(
-            utils.make_ascii("foo bar .,?;'!@#$%^&*()"),
-            "foo bar .,?;'!@#$%^&*()"
-        )
-        assert_equal(
-            utils.make_ascii('äèîõù'),
-            'aeiou'
-        )
-
-    def test_strip_punctuation(self):
-        assert_equal(
-            utils.strip_punctuation('abcde aeiou'),
-            'abcde aeiou'
-        )
-        assert_equal(
-            utils.strip_punctuation("abcde.' aeiou"),
-            'abcde aeiou'
-        )
-
-    def test_equate_nickname(self):
-        assert_true(utils.equate_nickname('robert', 'rob'))
-        assert_true(utils.equate_nickname('robert', 'robby'))
-        assert_true(utils.equate_nickname('robert', 'robbie'))
-        assert_true(utils.equate_nickname('robbie', 'robby'))
-        assert_false(utils.equate_nickname('robert', 'robin'))
-        assert_false(utils.equate_nickname('harold', 'harriet'))
 
 
 if __name__ == '__main__':

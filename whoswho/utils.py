@@ -81,7 +81,7 @@ def equate_nickname(name1, name2):
     """
     Evaluates whether names match based on common nickname patterns
 
-    This is not currently used in any name comparison.
+    This is not currently used in any name comparison
     """
     # Convert '-ie' and '-y' to the root name
     nickname_regex = r'(.)\1(y|ie)$'
@@ -124,3 +124,17 @@ def seq_ratio(word1, word2):
     """
     raw_ratio = SequenceMatcher(None, word1, word2).ratio()
     return int(round(100 * raw_ratio))
+
+
+def deep_update_dict(default, options):
+    """
+    Updates the values in a nested dict, while unspecified values will remain
+    unchanged
+    """
+    for key in options.keys():
+        default_setting = default.get(key)
+        new_setting = options.get(key)
+        if isinstance(default_setting, dict):
+            deep_update_dict(default_setting, new_setting)
+        else:
+            default[key] = new_setting
