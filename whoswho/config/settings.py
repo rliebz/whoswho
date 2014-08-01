@@ -17,6 +17,7 @@ DEFAULT_SETTINGS = {
         'allow_prefix': False,
         'weight': 5,
     },
+    'check_nickname': True,
 }
 
 STRICT_SETTINGS = {
@@ -38,6 +39,7 @@ STRICT_SETTINGS = {
         'allow_prefix': False,
         'weight': 5,
     },
+    'check_nickname': False,
 }
 
 LENIENT_SETTINGS = {
@@ -59,4 +61,5 @@ LENIENT_SETTINGS = {
         'allow_prefix': False,
         'weight': 5,
     },
+    'check_nickname': True,
 }

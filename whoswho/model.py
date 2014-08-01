@@ -20,6 +20,7 @@ class Name(object):
         self.name.middle = strip_punctuation(self.name.middle)
         self.name.last = strip_punctuation(self.name.last)
         self.name.suffix = strip_punctuation(self.name.suffix)
+        self.name.nickname = strip_punctuation(self.name.nickname)
 
     def deep_compare(self, other, settings):
         """
@@ -110,12 +111,43 @@ class Name(object):
             settings['first'],
             ratio,
         )
+
+        if settings['check_nickname']:
+            if first is False:
+                first = compare_name_component(
+                    self.name.nickname_list,
+                    other.name.first_list,
+                    settings['first'],
+                    ratio
+                ) or compare_name_component(
+                    self.name.first_list,
+                    other.name.nickname_list,
+                    settings['first'],
+                    ratio
+                )
+            elif ratio and first is not 100:
+                first = max(
+                    compare_name_component(
+                        self.name.nickname_list,
+                        other.name.first_list,
+                        settings['first'],
+                        ratio
+                    ),
+                    compare_name_component(
+                        self.name.first_list,
+                        other.name.nickname_list,
+                        settings['first'],
+                        ratio
+                    ),
+                )
+
         middle = compare_name_component(
             self.name.middle_list,
             other.name.middle_list,
             settings['middle'],
             ratio,
         )
+
         last = compare_name_component(
             self.name.last_list,
             other.name.last_list,

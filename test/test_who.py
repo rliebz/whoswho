@@ -71,6 +71,15 @@ class TestFullNames(unittest.TestCase):
         assert_true(who.match(name, 'Dr. Robert Liebowitz'))
         assert_false(who.match(name, 'Mrs. Robert Liebowitz'))
 
+    def test_nickname(self):
+        name = 'Robert "Evan" Liebowitz'
+        assert_true(who.match(name, 'Evan Liebowitz'))
+        assert_true(who.match('Evan Liebowitz', name))
+        assert_false(who.match(name, 'Wrongbert Lieobwitz'))
+        assert_false(who.match(name, 'Robert Evan'))
+        assert_false(who.match(name, 'Evan Liebowitz',
+                               options={'check_nickname': False}))
+
 
 class TestConfig(unittest.TestCase):
 
