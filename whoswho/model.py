@@ -8,19 +8,19 @@ from whoswho.config import (UNIQUE_SUFFIXES, MALE_TITLES, FEMALE_TITLES,
 from whoswho.utils import make_ascii, strip_punctuation, compare_name_component
 
 
-class Name(object):
+class Name(HumanName):
 
     def __init__(self, fullname):
         ascii_name = make_ascii(fullname)
-        self.name = HumanName(ascii_name)
+        super(Name, self).__init__(ascii_name)
 
         # Format after parsing to preserve parsing logic
-        self.name.title = strip_punctuation(self.name.title)
-        self.name.first = strip_punctuation(self.name.first)
-        self.name.middle = strip_punctuation(self.name.middle)
-        self.name.last = strip_punctuation(self.name.last)
-        self.name.suffix = strip_punctuation(self.name.suffix)
-        self.name.nickname = strip_punctuation(self.name.nickname)
+        self.title = strip_punctuation(self.title)
+        self.first = strip_punctuation(self.first)
+        self.middle = strip_punctuation(self.middle)
+        self.last = strip_punctuation(self.last)
+        self.suffix = strip_punctuation(self.suffix)
+        self.nickname = strip_punctuation(self.nickname)
 
     def deep_compare(self, other, settings):
         """
@@ -78,10 +78,10 @@ class Name(object):
         """Return False if titles have different gender associations"""
 
         # If title is omitted, assume a match
-        if not self.name.title or not other.name.title:
+        if not self.title or not other.title:
             return True
 
-        titles = set(self.name.title_list + other.name.title_list)
+        titles = set(self.title_list + other.title_list)
 
         return not (titles & MALE_TITLES and titles & FEMALE_TITLES)
 
@@ -89,11 +89,11 @@ class Name(object):
         """Return false if suffixes are mutually exclusive"""
 
         # If suffix is omitted, assume a match
-        if not self.name.suffix or not other.name.suffix:
+        if not self.suffix or not other.suffix:
             return True
 
         # Check if more than one unique suffix
-        suffix_set = set(self.name.suffix_list + other.name.suffix_list)
+        suffix_set = set(self.suffix_list + other.suffix_list)
         unique_suffixes = suffix_set & UNIQUE_SUFFIXES
         for key in EQUIVALENT_SUFFIXES.keys():
             if key in unique_suffixes:
@@ -106,8 +106,8 @@ class Name(object):
         """Return comparison of first, middle, and last components"""
 
         first = compare_name_component(
-            self.name.first_list,
-            other.name.first_list,
+            self.first_list,
+            other.first_list,
             settings['first'],
             ratio,
         )
@@ -115,42 +115,42 @@ class Name(object):
         if settings['check_nickname']:
             if first is False:
                 first = compare_name_component(
-                    self.name.nickname_list,
-                    other.name.first_list,
+                    self.nickname_list,
+                    other.first_list,
                     settings['first'],
                     ratio
                 ) or compare_name_component(
-                    self.name.first_list,
-                    other.name.nickname_list,
+                    self.first_list,
+                    other.nickname_list,
                     settings['first'],
                     ratio
                 )
             elif ratio and first is not 100:
                 first = max(
                     compare_name_component(
-                        self.name.nickname_list,
-                        other.name.first_list,
+                        self.nickname_list,
+                        other.first_list,
                         settings['first'],
                         ratio
                     ),
                     compare_name_component(
-                        self.name.first_list,
-                        other.name.nickname_list,
+                        self.first_list,
+                        other.nickname_list,
                         settings['first'],
                         ratio
                     ),
                 )
 
         middle = compare_name_component(
-            self.name.middle_list,
-            other.name.middle_list,
+            self.middle_list,
+            other.middle_list,
             settings['middle'],
             ratio,
         )
 
         last = compare_name_component(
-            self.name.last_list,
-            other.name.last_list,
+            self.last_list,
+            other.last_list,
             settings['last'],
             ratio,
         )
@@ -166,15 +166,15 @@ class Name(object):
         # TODO: Reduce weight for matches by prefix or initials
 
         first_is_used = settings['first']['required'] or \
-            self.name.first and other.name.first
+            self.first and other.first
         first_weight = settings['first']['weight'] if first_is_used else 0
 
         middle_is_used = settings['middle']['required'] or \
-            self.name.middle and other.name.middle
+            self.middle and other.middle
         middle_weight = settings['middle']['weight'] if middle_is_used else 0
 
         last_is_used = settings['last']['required'] or \
-            self.name.last and other.name.last
+            self.last and other.last
         last_weight = settings['last']['weight'] if last_is_used else 0
 
         return first_weight, middle_weight, last_weight

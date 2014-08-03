@@ -14,9 +14,9 @@ class TestFullNames(unittest.TestCase):
 
     def test_init(self):
         n = Name(self.name)
-        assert_equal(n.name.title_list, [''])
-        assert_equal(n.name.first_list, ['robert'])
-        assert_equal(n.name.middle_list, ['e'])
-        assert_equal(n.name.last_list, ['liebowitz'])
-        assert_equal(n.name.suffix_list, [''])
-        assert_equal(n.name.nickname_list, [''])
+        assert_equal(n.title_list, [''])
+        assert_equal(n.first_list, ['robert'])
+        assert_equal(n.middle_list, ['e'])
+        assert_equal(n.last_list, ['liebowitz'])
+        assert_equal(n.suffix_list, [''])
+        assert_equal(n.nickname_list, [''])
