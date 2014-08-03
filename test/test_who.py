@@ -94,7 +94,7 @@ class TestRatio(unittest.TestCase):
         name = self.name
         assert_equal(who.ratio(name, 'attaché Robert Evan Liebowitz'), 100)
         assert_equal(who.ratio(name, 'Rōbért Èvān Lîęböwitz'), 100)
-        assert_less(who.ratio(name, 'Rōbért Èvān Lęîböwitz'), 100)
+        assert_true(who.ratio(name, 'Rōbért Èvān Lęîböwitz') < 100)
 
     def test_name_and_initials(self):
         assert_equal(who.ratio(self.name, 'R. Evan Liebowitz'), 100)
@@ -104,27 +104,27 @@ class TestRatio(unittest.TestCase):
     def test_different_number_initials(self):
         assert_equal(who.ratio(self.name, 'Robert Liebowitz'), 100)
         assert_equal(who.ratio(self.name, 'R. Liebowitz'), 100)
-        assert_less(who.ratio(self.name, 'Robert E. E. Liebowitz'), 100)
-        assert_less(who.ratio(self.name, 'R. E. E. Liebowitz'), 100)
+        assert_true(who.ratio(self.name, 'Robert E. E. Liebowitz') < 100)
+        assert_true(who.ratio(self.name, 'R. E. E. Liebowitz') < 100)
         assert_equal(who.ratio('R.E.E. Liebowitz', 'R. E. E. Liebowitz'), 100)
 
     def test_different_initials(self):
-        assert_less(who.ratio(self.name, 'E. R. Liebowitz'), 100)
-        assert_less(who.ratio(self.name, 'E. Liebowitz'), 100)
-        assert_less(who.ratio(self.name, 'R. V. Liebowitz'), 100)
-        assert_less(who.ratio(self.name, 'O. E. Liebowitz'), 100)
-        assert_less(who.ratio(self.name, 'E. R. Liebowitz'),
+        assert_true(who.ratio(self.name, 'E. R. Liebowitz') < 100)
+        assert_true(who.ratio(self.name, 'E. Liebowitz') < 100)
+        assert_true(who.ratio(self.name, 'R. V. Liebowitz') < 100)
+        assert_true(who.ratio(self.name, 'O. E. Liebowitz') < 100)
+        assert_true(who.ratio(self.name, 'E. R. Liebowitz') <
                     who.ratio(self.name, 'E. E. Liebowitz'))
-        assert_less(who.ratio(self.name, 'E. R. Liebowitz'),
+        assert_true(who.ratio(self.name, 'E. R. Liebowitz') <
                     who.ratio(self.name, 'R. R. Liebowitz'))
-        assert_less(who.ratio(self.name, 'E. R. Liebowitz'),
+        assert_true(who.ratio(self.name, 'E. R. Liebowitz') <
                     who.ratio(self.name, 'E. Liebowitz'))
 
     def test_short_names(self):
         assert_true(who.ratio(self.name, 'Rob Liebowitz'))
-        assert_less(who.ratio(self.name, 'Bert Liebowitz'), 100)
-        assert_less(who.ratio(self.name, 'Robbie Liebowitz'), 100)
-        assert_less(who.ratio(self.name, 'xxxxx Liebowitz'),
+        assert_true(who.ratio(self.name, 'Bert Liebowitz') < 100)
+        assert_true(who.ratio(self.name, 'Robbie Liebowitz') < 100)
+        assert_true(who.ratio(self.name, 'xxxxx Liebowitz') <
                     who.ratio(self.name, 'Bobby Liebowitz'))
 
     def test_suffixes(self):
@@ -158,11 +158,11 @@ class TestRatio(unittest.TestCase):
         name = 'Robert "Evan" Liebowitz'
         assert_equal(who.ratio(name, 'Evan Liebowitz'), 100)
         assert_equal(who.ratio('Evan Liebowitz', name), 100)
-        assert_less(who.ratio(name, 'Wrongbert Lieobwitz'), 100)
-        assert_less(who.ratio(name, 'Robert Evan'), 100)
-        assert_less(who.ratio(name, 'Evan Liebowitz',
-                              options={'check_nickname': False}), 100)
-        assert_less(who.ratio(name, 'xxxx Liebowitz'),
+        assert_true(who.ratio(name, 'Wrongbert Lieobwitz') < 100)
+        assert_true(who.ratio(name, 'Robert Evan') < 100)
+        assert_true(who.ratio(name, 'Evan Liebowitz',
+                              options={'check_nickname': False}) < 100)
+        assert_true(who.ratio(name, 'xxxx Liebowitz') <
                     who.ratio(name, 'xvax Liebowitz'))
         assert_equal(who.ratio(name, 'xxxx Liebowitz'),
                      who.ratio(name, 'xvax Liebowitz', 'strict'))
