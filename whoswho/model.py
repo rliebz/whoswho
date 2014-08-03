@@ -139,6 +139,7 @@ class Name(HumanName):
                         settings['first'],
                         ratio
                     ),
+                    first,
                 )
 
         middle = compare_name_component(
