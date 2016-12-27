@@ -95,7 +95,7 @@ class Name(HumanName):
         # Check if more than one unique suffix
         suffix_set = set(self.suffix_list + other.suffix_list)
         unique_suffixes = suffix_set & UNIQUE_SUFFIXES
-        for key in EQUIVALENT_SUFFIXES.keys():
+        for key in EQUIVALENT_SUFFIXES:
             if key in unique_suffixes:
                 unique_suffixes.remove(key)
                 unique_suffixes.add(EQUIVALENT_SUFFIXES[key])

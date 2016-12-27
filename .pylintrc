@@ -1,0 +1,6 @@
+[MESSAGES CONTROL]
+disable=fixme,wildcard-import
+
+[VARIABLES]
+# Add `unicode` as built-in to fix 2/3 compatibility warnings
+additional-builtins=unicode

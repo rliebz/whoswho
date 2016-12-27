@@ -9,46 +9,51 @@ from difflib import SequenceMatcher
 from whoswho.config import STRIPPED_CHARACTERS
 
 
-def compare_name_component(list1, list2, settings, ratio=False):
+def compare_name_component(list1, list2, settings, use_ratio=False):
     """
     Compare a list of names from a name component based on settings
     """
     if not list1[0] or not list2[0]:
-        result = not settings['required']
-        return result * 100 if ratio else result
+        not_required = not settings['required']
+        return not_required * 100 if use_ratio else not_required
 
     if len(list1) != len(list2):
         return False
 
-    if ratio:
-        result = 0
-        for i, n1 in enumerate(list1):
-            n2 = list2[i]
+    compare_func = _ratio_compare if use_ratio else _normal_compare
+    return compare_func(list1, list2, settings)
 
-            # If initials don't match, result for this item is 0
-            if (len(n1) == 1 or len(n2) == 1) and not equate_initial(n1, n2):
-                continue
 
-            if settings['allow_prefix']:
-                result += 100 if equate_prefix(n1, n2) else seq_ratio(n1, n2)
-            elif settings['allow_initials']:
-                result += 100 if equate_initial(n1, n2) else seq_ratio(n1, n2)
-            else:
-                result += seq_ratio(n1, n2)
+def _ratio_compare(list1, list2, settings):
+    ratio = 0
+    for i, name1 in enumerate(list1):
+        name2 = list2[i]
 
-        result /= len(list1)
+        # If initials don't match, result for this item is 0
+        if (len(name1) == 1 or len(name2) == 1) and not equate_initial(name1, name2):
+            continue
 
-    else:
-        result = True
-        for i, n1 in enumerate(list1):
-            n2 = list2[i]
+        if settings['allow_prefix']:
+            ratio += 100 if equate_prefix(name1, name2) else seq_ratio(name1, name2)
+        elif settings['allow_initials']:
+            ratio += 100 if equate_initial(name1, name2) else seq_ratio(name1, name2)
+        else:
+            ratio += seq_ratio(name1, name2)
 
-            if settings['allow_prefix']:
-                result &= equate_prefix(n1, n2)
-            elif settings['allow_initials']:
-                result &= equate_initial(n1, n2)
-            else:
-                result &= n1 == n2
+    return ratio / len(list1)
+
+
+def _normal_compare(list1, list2, settings):
+    result = True
+    for i, name1 in enumerate(list1):
+        name2 = list2[i]
+
+        if settings['allow_prefix']:
+            result &= equate_prefix(name1, name2)
+        elif settings['allow_initials']:
+            result &= equate_initial(name1, name2)
+        else:
+            result &= name1 == name2
 
     return result
 
@@ -100,7 +105,7 @@ def make_ascii(word):
     """
     Converts unicode-specific characters to their equivalent ascii
     """
-    if sys.version_info < (3,0,0):
+    if sys.version_info < (3, 0, 0):
         word = unicode(word)
     else:
         word = str(word)
