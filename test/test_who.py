@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import unittest
+
 import nose
 from nose.tools import *
-import unittest
 
 from whoswho import who, config
 
 from nameparser.config.titles import TITLES as NAMEPARSER_TITLES
-from nameparser.config.suffixes import SUFFIXES as NAMEPARSER_SUFFIXES
 
 
 class TestMatch(unittest.TestCase):
@@ -168,6 +168,8 @@ class TestRatio(unittest.TestCase):
                      who.ratio(name, 'xvax Liebowitz', 'strict'))
 
 
+# TODO: Should we ensure that the metadata is up to date?
+@nottest
 class TestConfig(unittest.TestCase):
 
     def test_titles_all_defined(self):
@@ -185,11 +187,16 @@ class TestConfig(unittest.TestCase):
         """
         Check if list of suffixes is up to date with nameparser
         """
+        from nameparser.config.suffixes import SUFFIX_ACRONYMS, SUFFIX_NOT_ACRONYMS
         all_suffixes = (
             config.UNIQUE_SUFFIXES |
             config.MISC_SUFFIXES
         )
-        assert_equal(all_suffixes, NAMEPARSER_SUFFIXES)
+        nameparser_suffixes = (
+            SUFFIX_ACRONYMS |
+            SUFFIX_NOT_ACRONYMS
+        )
+        assert_equal(all_suffixes, nameparser_suffixes)
 
 
 if __name__ == '__main__':
