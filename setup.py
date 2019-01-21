@@ -6,7 +6,7 @@ TEST_REQUIREMENTS = ['nose']
 setup(
     name='whoswho',
     packages=find_packages(),
-    version='0.2.0',
+    version='0.2.1',
     description='A simple python library for determining whether '
                 'two names describe the same person.',
     author='Robert Liebowitz',
